@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
+import {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
-import { Briefcase, Cpu, Database, PlusCircle, AlertTriangle } from "lucide-react"
+import { Briefcase, Cpu, Database, PlusCircle, AlertTriangle, CpuIcon, DatabaseIcon } from "lucide-react"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
@@ -24,31 +24,23 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { checkAuth } from "@/lib/auth"
+import { useAuth } from "@/hooks/useAuth"
+import { getEquipmentDetailStats } from "@/lib/equipmentDetails"
+import { toast } from "sonner"
+import { Skeleton } from "@/components/ui/skeleton"
 
-// بيانات الإحصائيات
-const statsData = [
-  {
-    title: "الشركات",
-    value: "10",
-    description: "شركة مسجلة حاليًا",
-    icon: Briefcase,
-    link: "/companies-list",
-  },
-  {
-    title: "المعدات",
-    value: "25",
-    description: "معدة متاحة للعمل",
-    icon: Cpu,
-    link: "/equipment",
-  },
-  {
-    title: "التراخيص",
-    value: "18",
-    description: "ترخيصًا نشطًا",
-    icon: Database,
-    link: "/licenses",
-  },
-]
+
+
+type Detail = {
+  category_id?: number | string;
+
+
+  category_name?: string;
+  details_aname?: string;
+  remaining_days?: number;
+  status?: string;
+}
 
 // بيانات التراخيص التي توشك على الانتهاء
 const expiringLicenses = [
@@ -59,10 +51,52 @@ const expiringLicenses = [
 ]
 
 export default function DashboardPage() {
-  const router = useRouter()
+  const router = useRouter();
+  const { user, loading } = useAuth();
+  const [mounted, setMounted] = useState(false)
+  const [details, setDetails] = useState<Detail[]>();
+  const [loadingC, setLoadingC] = useState(false);
+  const [quickStats, setQuickStats] = useState<{
+    category: number,
+    details: number
+  }>()
+
+
+  useEffect(() => {
+    setMounted(true)
+    async function fetchData() {
+      try {
+        const res = await getEquipmentDetailStats()
+      
+      if (res?.status) {
+        console.log(res.data.data.expiring_items)
+        setDetails(res.data.data.expiring_items)
+        setQuickStats({
+          category: res.data.data.categories_count,
+          details: res.data.data.details_count
+        })
+      } else {
+        
+        toast.error("حدث خطأ أثناء جلب التصنيفات")
+
+        console.log("fetching the data: ", res)
+      }
+
+      setLoadingC(false)
+      } catch {
+        toast.error("حدث خطأ ما")
+        setLoadingC(false)
+      }
+    }
+
+    // fetchData()
+  }, [])
 
   return (
-    <SidebarProvider style={{ "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" } as React.CSSProperties}>
+    <>
+    {loading ? <div className="text-center h-screen w-[100%] flex items-center justify-center">
+      <p>... جاري التحميل</p>
+    </div> : <SidebarProvider dir="rtl" style={{ "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" } as React.CSSProperties}>
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
@@ -71,45 +105,58 @@ export default function DashboardPage() {
           {/* العنوان والزر */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              {/* <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                 لوحة التحكم
-              </h1>
+              </h1> */}
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 نظرة سريعة على أهم البيانات في نظامك.
               </p>
             </div>
-            <Button>
+            {/* <Button>
               <PlusCircle className="ml-2 h-4 w-4" />
               إضافة عنصر جديد
-            </Button>
+            </Button> */}
           </div>
 
           {/* بطاقات الإحصائيات */}
-          <div className="grid gap-6 md:grid-cols-3">
-            {statsData.map((stat) => {
-              const Icon = stat.icon
-              return (
+          <div className="grid gap-6 md:grid-cols-2">
+
                 <Card
-                  key={stat.title}
                   className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
-                  onClick={() => router.push(stat.link)}
                 >
                   <CardContent className="flex items-center gap-6 p-6">
                     <div className="rounded-lg bg-primary/10 p-4">
-                      <Icon className="h-8 w-8 text-primary" />
+                      <CpuIcon className="h-8 w-8 text-primary" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        {stat.title}
+                        التصنيفات
                       </p>
                       <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                        {stat.value}
+                        {quickStats?.category}
                       </p>
                     </div>
                   </CardContent>
                 </Card>
-              )
-            })}
+
+                <Card
+                  className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
+                >
+                  <CardContent className="flex items-center gap-6 p-6">
+                    <div className="rounded-lg bg-primary/10 p-4">
+                      <DatabaseIcon className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        المعدات 
+                      </p>
+                      <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
+                      {quickStats?.details}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
           </div>
 
           {/* جدول تنبيهات التراخيص */}
@@ -124,51 +171,67 @@ export default function DashboardPage() {
                   قائمة بالتراخيص التي ستنتهي صلاحيتها قريبًا.
                 </CardDescription>
               </div>
-              <Button variant="outline" size="sm">عرض الكل</Button>
+              {/* <Button variant="outline" size="sm">عرض الكل</Button> */}
             </CardHeader>
-            <CardContent className="p-4 overflow-x-auto">
+            <CardContent className="p-4 overflow-x-auto ">
+            {loadingC ? <>
+                  <Table className="border-spaceing-4">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-right"> <Skeleton className="h-4 w-[250px]" /></TableHead>
+                        <TableHead className="text-right"> <Skeleton className="h-4 w-[250px]" /></TableHead>
+                        <TableHead className="text-right"> <Skeleton className="h-4 w-[250px]" /></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                  </Table>
+                </> : <>
+            
               <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-gray-100">رقم الترخيص</TableHead>
-                    <TableHead>المعدة</TableHead>
-                    <TableHead className="hidden md:table-cell">الشركة</TableHead>
-                    <TableHead className="text-center">الأيام المتبقية</TableHead>
+                <TableHeader >
+                  <TableRow >
+                    <TableHead className="text-right">التصنيف</TableHead>
+                    <TableHead className="text-right">المعدة</TableHead>
+                    <TableHead className="text-center ">الأيام المتبقية</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {expiringLicenses.map((license) => (
-                    <TableRow key={license.id} className="hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
-                      <TableCell className="bg-gray-50 dark:bg-zinc-800 font-medium">{license.id}</TableCell>
-                      <TableCell>{license.equipment}</TableCell>
-                      <TableCell className="hidden md:table-cell">{license.company}</TableCell>
+                {!loadingC && <>
+                  {details?.map((item: Detail) => (
+                    <TableRow key={item.category_id as number + Math.random()} className="hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                      <TableCell>{item.category_name}</TableCell>
+                      <TableCell>{item.details_aname}</TableCell>
                       <TableCell className="text-center">
                         <Badge
                           variant={
-                            license.status === 'danger'
+                            item.status === 'expired'
                               ? 'destructive'
-                              : license.status === 'warning'
+                              : item.status === 'expiring_soon'
                               ? 'secondary'
                               : 'default'
                           }
                           className={
-                            license.status === 'safe'
+                            item.status === 'safe'
                               ? 'bg-green-500 text-white hover:bg-green-600'
                               : ''
                           }
                         >
-                          {license.daysLeft} يوم
+                          {item.remaining_days} يوم
                         </Badge>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ))} 
+                  </>
+                }
+                
                 </TableBody>
               </Table>
+              </>
+            }
             </CardContent>
           </Card>
 
         </main>
       </SidebarInset>
-    </SidebarProvider>
+    </SidebarProvider>}</>
   )
 }

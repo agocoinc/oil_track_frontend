@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { License } from "@/types/license"
+import { License } from "@/types/detail"
 
 interface LicenseSheetProps {
   initialData?: License

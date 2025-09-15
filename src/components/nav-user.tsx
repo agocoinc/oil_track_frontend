@@ -28,6 +28,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { logout } from "@/lib/auth"
+import { useState } from "react"
+import { toast } from "sonner"
 
 export function NavUser({
   user,
@@ -35,13 +38,29 @@ export function NavUser({
   user: {
     name: string
     email: string
-    avatar: string
   }
 }) {
   const { isMobile } = useSidebar()
+  const [loading, setLoading] = useState(false);
 
+  const signout = async () => {
+    try {
+      setLoading(true);
+      toast.promise(
+        logout(), // This should be your async logout function
+        {
+          loading: 'جاري تسجيل الخروج...',
+          success: 'تم تسجيل الخروج بنجاح',
+          error: 'حدث خطأ أثناء تسجيل الخروج',
+        }
+      );
+      setLoading(false)
+    } catch(err) {
+      setLoading(false)
+    }
+  }
   return (
-    <SidebarMenu>
+    <SidebarMenu dir="rtl">
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -49,11 +68,11 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
+              {/* <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              </Avatar> */}
+              <div className="grid flex-1 text-right text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="text-muted-foreground truncate text-xs">
                   {user.email}
@@ -68,7 +87,7 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
+            {/* <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
@@ -95,8 +114,8 @@ export function NavUser({
                 الإشعارات
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuSeparator /> */}
+            <DropdownMenuItem onClick={signout} dir="rtl" className="cursor-pointer">
               <IconLogout />
               تسجيل الخروج
             </DropdownMenuItem>

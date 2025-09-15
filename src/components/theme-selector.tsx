@@ -15,19 +15,19 @@ import {
 
 const DEFAULT_THEMES = [
   {
-    name: "Default",
+    name: "التلقائي",
     value: "default",
   },
   {
-    name: "Blue",
+    name: "أزرق",
     value: "blue",
   },
   {
-    name: "Green",
+    name: "أخضر",
     value: "green",
   },
   {
-    name: "Amber",
+    name: "أمبر",
     value: "amber",
   },
 ]
@@ -56,30 +56,30 @@ export function ThemeSelector() {
   return (
     <div className="flex items-center gap-2">
       <Label htmlFor="theme-selector" className="sr-only">
-        Theme
+        النمط
       </Label>
-      <Select value={activeTheme} onValueChange={setActiveTheme}>
+      <Select value={activeTheme} onValueChange={setActiveTheme} dir="rtl">
         <SelectTrigger
           id="theme-selector"
           size="sm"
           className="justify-start *:data-[slot=select-value]:w-12"
         >
           <span className="text-muted-foreground hidden sm:block">
-            Select a theme:
+            اختر النمط
           </span>
           <span className="text-muted-foreground block sm:hidden">Theme</span>
           <SelectValue placeholder="Select a theme" />
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>
-            <SelectLabel>Default</SelectLabel>
+            <SelectLabel>التلقائي</SelectLabel>
             {DEFAULT_THEMES.map((theme) => (
               <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
               </SelectItem>
             ))}
           </SelectGroup>
-          <SelectSeparator />
+          {/* <SelectSeparator />
           <SelectGroup>
             <SelectLabel>Scaled</SelectLabel>
             {SCALED_THEMES.map((theme) => (
@@ -95,7 +95,7 @@ export function ThemeSelector() {
                 {theme.name}
               </SelectItem>
             ))}
-          </SelectGroup>
+          </SelectGroup> */}
         </SelectContent>
       </Select>
     </div>
