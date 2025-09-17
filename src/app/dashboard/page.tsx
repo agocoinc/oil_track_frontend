@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
-import { Briefcase, Cpu, Database, PlusCircle, AlertTriangle, CpuIcon, DatabaseIcon } from "lucide-react"
+import { AlertTriangle, CpuIcon, DatabaseIcon } from "lucide-react"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
@@ -14,7 +14,6 @@ import {
   CardDescription,
 } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -24,7 +23,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { checkAuth } from "@/lib/auth"
 import { useAuth } from "@/hooks/useAuth"
 import { getEquipmentDetailStats } from "@/lib/equipmentDetails"
 import { toast } from "sonner"

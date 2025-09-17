@@ -1,5 +1,17 @@
 import { API_BASE, initCSRF } from "./constants";
 
+type Detail = {
+  id?: number,
+  equipment_category_id: number | string,
+  loc_name: string,
+  details_aname: string,
+  details_lname: string,
+  details_qty: number,
+  date_from: string,
+  date_to: string,
+  note: string
+}
+
 export async function getEquipmentDetailsByCategory(categoryId: string | number) {
   try {
     const res = await fetch(`${API_BASE}/equipment-details/${categoryId}`, {
@@ -43,7 +55,7 @@ export async function getEquipmentDetail(detailId: string | number) {
   }
 }
 
-export async function createEquipmentDetail(detailData: any) {
+export async function createEquipmentDetail(detailData: Detail) {
   try {
     await initCSRF();
 
@@ -91,8 +103,8 @@ export async function deleteEquipmentDetail(detailId: string | number) {
 
     const data = await res.json();
     return { status: true, data };
-  } catch (err) {
-    console.error("Delete equipment detail error:", err);
+  } catch {
+    console.error("Delete equipment detail error:");
     return { status: false, data: "something went wrong" };
   }
 }

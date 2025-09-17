@@ -2,24 +2,12 @@
 
 import * as React from "react"
 import {
-  IconCamera,
   IconDashboard,
   IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
   IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -39,11 +27,6 @@ const data = {
       url:  "/dashboard",
       icon: IconDashboard,
     },
-    // {
-    //   title: "الشركات",
-    //   url: "/companies",
-    //   icon: IconListDetails,
-    // },
     {
       title: "المعدات",
       url: "/equipments",
@@ -56,8 +39,11 @@ const data = {
   
 }
 
+
+
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Sidebar collapsible="offcanvas" {...props} dir="rtl" side="right">
@@ -78,14 +64,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavDocuments items={data.documents} /> */}
-        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{
+        {user ? <NavUser user={{
           name: user?.name,
           email: user?.email
-        }} />
+        }} /> : ""}
       </SidebarFooter>
     </Sidebar>
   )

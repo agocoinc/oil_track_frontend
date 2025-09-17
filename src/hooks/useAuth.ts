@@ -4,8 +4,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkAuth } from "@/lib/auth";
 
-export function useAuth({ redirectIfNotAuthenticated = true } = {}) {
-  const [user, setUser] = useState<any>(null);
+type User = {
+  name: string;
+  email: string;
+}
+
+interface UseAuthReturn {
+  user: User | null;
+  loading: boolean;
+}
+
+export function useAuth({ redirectIfNotAuthenticated = true } = {}): UseAuthReturn {
+  const [user, setUser] = useState<User | null>(null);  // <-- typed here
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 

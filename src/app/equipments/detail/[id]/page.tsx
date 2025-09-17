@@ -1,16 +1,13 @@
 "use client"
 
-import { useState, useEffect, FormEvent } from "react"
+import { useState, useEffect } from "react"
 import * as Reach from 'react'
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
 import {
   Dialog,
@@ -22,10 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { createEquipmentCategory, getEquipmentCategories, getEquipmentCategory } from "@/lib/equipmentCategory"
-import Link from "next/link"
-import { createEquipmentDetail, deleteEquipmentDetail, getEquipmentDetail, getEquipmentDetailsByCategory } from "@/lib/equipmentDetails"
+import { deleteEquipmentDetail, getEquipmentDetail } from "@/lib/equipmentDetails"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"

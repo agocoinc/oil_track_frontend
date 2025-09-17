@@ -1,16 +1,14 @@
 "use client"
 
-import { useState, useEffect, FormEvent } from "react"
+import { useState, useEffect } from "react"
 import * as React from 'react'
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
 import {
   Dialog,
@@ -23,9 +21,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { createEquipmentCategory, deleteEquipmentCategory, getEquipmentCategories, getEquipmentCategory } from "@/lib/equipmentCategory"
+import { deleteEquipmentCategory, getEquipmentCategory } from "@/lib/equipmentCategory"
 import Link from "next/link"
-import { createEquipmentDetail, deleteEquipmentDetail, getEquipmentDetailsByCategory } from "@/lib/equipmentDetails"
+import { createEquipmentDetail, getEquipmentDetailsByCategory } from "@/lib/equipmentDetails"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"

@@ -1,5 +1,12 @@
 import { API_BASE, initCSRF } from "./constants";
 
+type Category = {
+  id?: number,
+  aname: string,
+  lname: string,
+  note: string
+}
+
 export async function getEquipmentCategories() {
   try {
     const res = await fetch(`${API_BASE}/equipment-categories`, {
@@ -38,7 +45,7 @@ export async function getEquipmentCategory(categoryId: string | number) {
 }
 
 
-export async function createEquipmentCategory(categoryData: any) {
+export async function createEquipmentCategory(categoryData: Category) {
   try {
     await initCSRF();
 
