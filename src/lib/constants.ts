@@ -1,10 +1,6 @@
-export const API_BASE = "http://10.4.0.147/c/api";
-export const API_AUTH = "http://10.4.0.147/c";
-export const API_COOKIE_URL = "http://10.4.0.147/c/sanctum/csrf-cookie";
-
-// export const API_BASE = "http://10.4.0.26:5001/api";
-// export const API_AUTH = "http://10.4.0.26:5001";
-// export const API_COOKIE_URL = "http://10.4.0.26:5001/sanctum/csrf-cookie";
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+export const API_AUTH = process.env.NEXT_PUBLIC_API_AUTH!;
+export const API_COOKIE_URL = process.env.NEXT_PUBLIC_API_COOKIE_URL!;
 
 export async function initCSRF() {
   await fetch(API_COOKIE_URL, {
