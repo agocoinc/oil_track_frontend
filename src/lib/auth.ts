@@ -1,4 +1,4 @@
-import { API_AUTH, API_BASE, API_COOKIE_URL } from "./constants";
+import { API_AUTH, API_COOKIE_URL } from "./constants";
 
 export async function login(email: string, password:string) {
   try {

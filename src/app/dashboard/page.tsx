@@ -1,7 +1,6 @@
 "use client"
 
 import {useEffect, useState} from "react"
-import { useRouter } from "next/navigation"
 import { AlertTriangle, CpuIcon, DatabaseIcon } from "lucide-react"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -44,9 +43,8 @@ type Detail = {
 
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { user, loading } = useAuth();
-  const [mounted, setMounted] = useState(false)
+  const { loading } = useAuth();
+  const [_, setMounted] = useState(false)
   const [details, setDetails] = useState<Detail[]>();
   const [loadingC, setLoadingC] = useState(false);
   const [quickStats, setQuickStats] = useState<{

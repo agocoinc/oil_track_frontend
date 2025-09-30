@@ -29,7 +29,7 @@ interface OrganizationProps {
 
 function Organization({ org, onCollapse, collapsed }: OrganizationProps) {
   const childrenCount = org.organizationChildRelationship?.length ?? 0;
-  let bgColor = "bg-white";
+  const bgColor = "bg-white";
 
   return (
     <div

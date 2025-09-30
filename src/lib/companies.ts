@@ -1,5 +1,10 @@
-import { API_BASE, initCSRF } from "./constants";
+import { API_BASE } from "./constants";
 
+
+interface StructureType {
+  tradingName: string;
+  organizationChildRelationship?: StructureType[];
+}
 
 export async function getCompanies() {
   try {
@@ -37,7 +42,7 @@ export async function getCompanyStructure(companyId: number | string) {
   }
 }
 
-export async function storeCompanyStructure(companyId: number | string, structureData: any) {
+export async function storeCompanyStructure(companyId: number | string, structureData: StructureType) {
   try {
     console.log("storeCompanyStructure called with:", { company_id: companyId, structureData });
 
