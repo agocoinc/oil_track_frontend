@@ -8,7 +8,7 @@ interface StructureType {
 
 export async function getCompanies() {
   try {
-    const res = await fetch(`${API_BASE}/companies`, {
+    const res = await fetch(`${API_BASE}/a/companies`, {
       credentials: "include",
       headers: {
         Accept: "application/json",
@@ -26,7 +26,7 @@ export async function getCompanies() {
 
 export async function getCompanyStructure(companyId: number | string) {
   try {
-    const res = await fetch(`${API_BASE}/companies/${companyId}/structure`, {
+    const res = await fetch(`${API_BASE}/a/companies/${companyId}/structure`, {
       credentials: "include",
       headers: {
         Accept: "application/json",
@@ -46,7 +46,7 @@ export async function storeCompanyStructure(companyId: number | string, structur
   try {
     console.log("storeCompanyStructure called with:", { company_id: companyId, structureData });
 
-    const res = await fetch(`${API_BASE}/companies/${companyId}/structure`, {
+    const res = await fetch(`${API_BASE}/a/companies/${companyId}/structure`, {
       method: "POST",
       credentials: "include",
       headers: {
