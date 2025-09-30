@@ -24,9 +24,10 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/hooks/useAuth"
-import { getEquipmentDetailStats } from "@/lib/equipmentDetails"
+import { getEquipmentDetailStats, getEquipmentDetailStatsForAdmin } from "@/lib/equipmentDetails"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
+import { isAdmin } from "@/lib/auth"
 
 
 
@@ -40,13 +41,7 @@ type Detail = {
   status?: string;
 }
 
-// بيانات التراخيص التي توشك على الانتهاء
-const expiringLicenses = [
-  { id: "LIC-001", equipment: "رافعة شوكية #1023", company: "شركة الأفق", daysLeft: 15, status: "warning" },
-  { id: "LIC-008", equipment: "حفارة #2045", company: "بناة المستقبل", daysLeft: 5, status: "danger" },
-  { id: "LIC-012", equipment: "مولد كهرباء #5011", company: "الطاقة المستدامة", daysLeft: 45, status: "safe" },
-  { id: "LIC-003", equipment: "ضاغط هواء #3321", company: "شركة الأفق", daysLeft: 2, status: "danger" },
-]
+
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -56,13 +51,22 @@ export default function DashboardPage() {
   const [loadingC, setLoadingC] = useState(false);
   const [quickStats, setQuickStats] = useState<{
     category: number,
-    details: number
+    details: number,
+    companies?: number
   }>()
+
+  const [checkAdmin, setCheckAdmin] = useState(false)
 
 
   useEffect(() => {
+    const check = async () => {
+      const result = await isAdmin()
+      setCheckAdmin(result);
+    }
+    check()
     setMounted(true)
     async function fetchData() {
+      console.log('fetching stats normal')
       try {
         const res = await getEquipmentDetailStats()
       
@@ -71,7 +75,7 @@ export default function DashboardPage() {
         setDetails(res.data.data.expiring_items)
         setQuickStats({
           category: res.data.data.categories_count,
-          details: res.data.data.details_count
+          details: res.data.data.details_count,
         })
       } else {
         
@@ -87,7 +91,45 @@ export default function DashboardPage() {
       }
     }
 
-    // fetchData()
+
+    async function fetchDataAdmin() {
+      console.log('fetching stats ...')
+      try {
+        const res = await getEquipmentDetailStatsForAdmin()
+      
+      if (res?.status) {
+        console.log(res.data.data.expiring_items)
+        setDetails(res.data.data.expiring_items)
+        setQuickStats({
+          category: res.data.data.categories_count,
+          details: res.data.data.details_count,
+          companies: res.data.data.companies_count
+        })
+      } else {
+        
+        toast.error("حدث خطأ أثناء جلب التصنيفات")
+
+        console.log("fetching the data: ", res)
+      }
+
+      setLoadingC(false)
+      } catch {
+        toast.error("حدث خطأ ما")
+        setLoadingC(false)
+      }
+    }
+
+
+    async function main() {
+      if(await isAdmin()) {
+        fetchDataAdmin()
+      }else{
+        fetchData()
+      }
+    }
+
+    main();
+
   }, [])
 
   return (
@@ -117,7 +159,7 @@ export default function DashboardPage() {
           </div>
 
           {/* بطاقات الإحصائيات */}
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className={`grid gap-6 md:grid-cols-${checkAdmin ? '3' : '2'}`}>
 
                 <Card
                   className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
@@ -154,6 +196,25 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {checkAdmin && <Card
+                  className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
+                >
+                  <CardContent className="flex items-center gap-6 p-6">
+                    <div className="rounded-lg bg-primary/10 p-4">
+                      <DatabaseIcon className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        الشركات 
+                      </p>
+                      <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
+                      {quickStats?.companies}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>}
+
 
           </div>
 

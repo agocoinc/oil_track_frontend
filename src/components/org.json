@@ -1,0 +1,25 @@
+{
+  "tradingName": "الإدارة العليا",
+  "organizationChildRelationship": [
+    {
+      "tradingName": "إدارة تقنية المعلومات"
+    },
+    {
+      "tradingName":  "إدارة الشؤون الإدارية",
+      "organizationChildRelationship": [
+        {
+          "tradingName":  "إدارة الشؤون المالية"
+        },
+        {
+          "tradingName":  "إدارة الشؤون القانونية"
+        },
+        {
+          "tradingName":  "إدارة الهندسة والإنشاءات"
+        },
+        {
+          "tradingName":  "إدارة العمليات"
+        }
+      ]
+    }
+  ]
+}

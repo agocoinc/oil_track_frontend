@@ -132,3 +132,28 @@ export async function getEquipmentDetailStats() {
     return { status: false, data: "something went wrong" };
   }
 }
+
+
+export async function getEquipmentDetailStatsForAdmin() {
+  try {
+    const res = await fetch(`${API_BASE}/equipment-details-stats-admin/`, {
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log(data)
+      return { status: false, data: "something went wrong" }
+    };
+    const data = await res.json();
+
+    return { status: true, data };
+  } catch (err) {
+    
+    console.error("Get equipment detail error:", err);
+    return { status: false, data: err };
+  }
+}

@@ -14,12 +14,19 @@ import Link from "next/link"
 
 export function NavMain({
   items,
+  user
 }: {
   items: {
     title: string
     url: string
     icon?: Icon
+    role: string
   }[]
+  user: {
+    name: string,
+    email: string,
+    role: string
+  }
 }) {
   return (
     <SidebarGroup>
@@ -41,15 +48,21 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <Link href={item.url}>{item.title}</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items
+            .filter(item => user.role === 'admin' || item.role !== 'admin')
+            .map(item => (
+              <SidebarMenuItem
+                key={item.title}
+                className={user.role === 'admin' && item.role === 'admin' ? '' : undefined}
+              >
+                <SidebarMenuButton tooltip={item.role === 'admin' ? `${item.title} (Admin)` : item.title}>
+                  {item.icon && <item.icon />}
+                  <Link href={item.url}>{item.title}</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
         </SidebarMenu>
+
       </SidebarGroupContent>
     </SidebarGroup>
   )

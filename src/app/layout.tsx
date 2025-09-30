@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+
 // import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ActiveThemeProvider } from "@/components/active-theme";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+// import { useEffect, useState } from "react";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -26,6 +27,9 @@ export default async function RootLayout({
   // هنا نستخدم await لأن cookies() عندك Promise
   const cookieStore = await cookies();
   const activeThemeValue = cookieStore.get("active_theme")?.value || "light";
+
+
+  
 
   return (
     <html

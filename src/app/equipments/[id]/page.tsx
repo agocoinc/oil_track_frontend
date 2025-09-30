@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import * as React from 'react'
+import { useState, useEffect, use } from "react"
+// import * as React from 'react'
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
@@ -27,6 +27,7 @@ import { createEquipmentDetail, getEquipmentDetailsByCategory } from "@/lib/equi
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
+import { isAdmin } from "@/lib/auth"
 
 
 type Detail = {
@@ -49,6 +50,7 @@ type Category = {
 }
 
 export default function ShowEquipmentPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("")
   const [locName, setLocName] = useState("");
@@ -70,14 +72,25 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
-  const [errors, setErrors] = React.useState<{ [key: string]: string[] }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
 
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [checkAdmin, setCheckAdmin] = useState(false);
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(details.length / itemsPerPage);
-  const paginatedDetails = details.slice(
+  const filteredDetails = details.filter(detail => {
+  if (!searchQuery) return true; // no search, include all
+  const query = searchQuery.toLowerCase();
+  return (
+    detail.details_aname.toLowerCase().includes(query) ||
+    detail.details_lname.toLowerCase().includes(query) ||
+    detail.note?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredDetails.length / itemsPerPage);
+  const paginatedDetails = filteredDetails.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -85,11 +98,16 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
 
   const [mounted, setMounted] = useState(false)
 
-  const {id} = React.use(params);
+  // const {id} = React.use(params);
 
 
 
   useEffect(() => {
+    const check = async () => {
+      const result = await isAdmin()
+      setCheckAdmin(result);
+    }
+    check()
     setMounted(true)
     async function fetchData() {
       try {
@@ -128,6 +146,10 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
     fetchData()
     fetchDetails()
   }, [])
+
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   if (!mounted) return null
 
@@ -196,6 +218,8 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
   };
 
 
+
+
   return (
     <>
     <SidebarProvider style={{ "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)" } as React.CSSProperties} dir="rtl">
@@ -212,7 +236,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
             
             <div className="flex items-center justify-between">
             <p>{category.note}</p>
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            {!checkAdmin && <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => setIsDeleteDialogOpen(true)} className="bg-red-500 text-white cursor-pointer">حذف</Button>
               </DialogTrigger>
@@ -240,7 +264,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
                   </DialogFooter>
                 </form>
               </DialogContent>
-            </Dialog>
+            </Dialog>}
           </div>
           </>
         ) : (
@@ -251,7 +275,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
         )}
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">المعدات</h1>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            {!checkAdmin && <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => setIsDialogOpen(true)} className="cursor-pointer">إضافة معدات</Button>
               </DialogTrigger>
@@ -377,7 +401,8 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
                   </DialogFooter>
                 </form>
               </DialogContent>
-            </Dialog>
+            </Dialog>}
+            
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-4">

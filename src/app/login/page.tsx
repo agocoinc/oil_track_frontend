@@ -1,7 +1,7 @@
 "use client"
 
 import { LoginForm } from "@/components/login-form"
-import { checkAuth } from "@/lib/auth";
+import { checkAuth, isAdmin } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,7 +15,7 @@ export default function LoginPage() {
       try {
         const user = await checkAuth();
         if (user) {
-          router.push("/dashboard");
+          await isAdmin() ? router.push("/admin") : router.push("/dashboard");
         }
       } catch(err) {
         setLoading(false)

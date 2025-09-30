@@ -29,7 +29,7 @@ export async function login(email: string, password:string) {
 
     return {"status": true, "data": data};
   } catch (err) {
-    return {"status": true, "error": "something went wrong"};
+    return {"status": true, "error": err};
   }
 }
 
@@ -70,3 +70,20 @@ export async function checkAuth() {
     return null;
   }
 }
+
+export async function isAdmin() {
+  const user = await checkAuth();
+  if (!user) return false;
+  return user.role?.toLowerCase() === 'admin';
+}
+
+
+export async function isNormalUser() {
+  const user = await checkAuth();
+  if (!user) return false;
+  return user.role?.toLowerCase() === 'user';
+}
+
+
+
+

@@ -5,6 +5,7 @@ import {
   IconDashboard,
   IconDatabase,
   IconInnerShadowTop,
+  IconTable
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -26,11 +27,19 @@ const data = {
       title: "الصفحة الرئيسية",
       url:  "/dashboard",
       icon: IconDashboard,
+      role: "user"
     },
     {
       title: "المعدات",
       url: "/equipments",
       icon: IconDatabase,
+      role: "user"
+    },
+    {
+      title: "الشركات",
+      url: "/companies",
+      icon: IconTable,
+      role: "admin"
     },
    
    
@@ -63,7 +72,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} user={{name: user?.name || "", email: user?.email || "", role: user?.role || ""}} />
       </SidebarContent>
       <SidebarFooter>
         {user ? <NavUser user={{

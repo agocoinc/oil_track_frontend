@@ -7,6 +7,7 @@ import { checkAuth } from "@/lib/auth";
 type User = {
   name: string;
   email: string;
+  role: string;
 }
 
 interface UseAuthReturn {

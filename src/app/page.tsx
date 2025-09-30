@@ -1,6 +1,7 @@
 "use client"
 
 import { checkAuth } from "@/lib/auth";
+import { testAdmin } from "@/lib/equipmentCategory";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -11,6 +12,7 @@ export default function Home() {
       try {
         const user = await checkAuth();
         if (user) {
+          await testAdmin();
           router.push("/dashboard");
         }else{
           router.push("/login");

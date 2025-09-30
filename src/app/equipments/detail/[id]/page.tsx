@@ -23,6 +23,7 @@ import { deleteEquipmentDetail, getEquipmentDetail } from "@/lib/equipmentDetail
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "sonner"
+import { isAdmin } from "@/lib/auth"
 
 
 type Detail = {
@@ -45,6 +46,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
   const [loading, setLoading] = useState<boolean>(true)
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [checkAdmin, setCheckAdmin] = useState(false);
 
   const [detail, setDetail] = useState<Detail | null>()
 
@@ -58,6 +60,11 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
 
 
   useEffect(() => {
+    const check = async () => {
+      const result = await isAdmin()
+      setCheckAdmin(result);
+    }
+    check()
     setMounted(true)
     async function fetchData() {
       try {
@@ -124,7 +131,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
             
             <div className="flex items-center justify-between">
             <p>{detail.note}</p>
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            {!checkAdmin && <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => setIsDeleteDialogOpen(true)} className="bg-red-500 text-white cursor-pointer">حذف</Button>
               </DialogTrigger>
@@ -152,7 +159,7 @@ export default function ShowEquipmentPage({ params }: { params: Promise<{ id: st
                   </DialogFooter>
                 </form>
               </DialogContent>
-            </Dialog>
+            </Dialog>}
           </div>
           </>
         ) : (

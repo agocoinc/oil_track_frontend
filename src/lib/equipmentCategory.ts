@@ -25,6 +25,25 @@ export async function getEquipmentCategories() {
   }
 }
 
+export async function getAllEquipmentCategories() {
+  try {
+    const res = await fetch(`${API_BASE}/equipment-categories-all`, {
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) return {"status": false, "data": "something went wrong"};
+    const data = await res.json();
+    console.log(data)
+    return {"status": true, "data": data};
+  } catch (err) {
+    console.error("Get categories error:", err);
+    return {"status": false, "data": "something went wrong"};
+  }
+}
+
 
 export async function getEquipmentCategory(categoryId: string | number) {
   try {
@@ -60,7 +79,6 @@ export async function createEquipmentCategory(categoryData: Category) {
     });
 
     if (!res.ok) {
-      // Try to parse validation errors from server
       const errorData = await res.json();
       console.log(errorData)
       return { status: false, data: errorData };
@@ -98,6 +116,26 @@ export async function deleteEquipmentCategory(categoryId: string | number) {
   } catch (err) {
     console.error("Delete category error:", err);
     return {"status": false, "data": "something went wrong"};
+  }
+}
+
+
+
+export async function testAdmin() {
+  try {
+    const res = await fetch(`${API_BASE}/hello-admin`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+  
+    const data = await res.json();
+
+    console.log({"status": true, "data": data});
+  }catch(error) {
+    console.log(error)
   }
 }
 
