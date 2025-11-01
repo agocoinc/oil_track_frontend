@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { login } from "@/lib/auth";
+import { checkAuth, isAdmin, login } from "@/lib/auth";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm({
   className,
@@ -20,6 +21,7 @@ export function LoginForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("");
   const router = useRouter();
+  const {user} = useAuth();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,7 +42,10 @@ export function LoginForm({
 
     if (data.status) {
       
-      router.push("/dashboard");
+      const user = await checkAuth();
+              if (user) {
+                await isAdmin() ? router.push("/categories") : router.push("/u/categories");
+              }
       // setLoading(false)
     } else {
       toast.error('حدث خطأ في بيانات تسجيل الدخول')
@@ -57,7 +62,7 @@ export function LoginForm({
               className="flex flex-col items-center gap-2 font-medium"
             >
               <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
+                {/* <GalleryVerticalEnd className="size-6" /> */}
               </div>
               <span className="sr-only">المنظومة</span>
             </a>

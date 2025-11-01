@@ -111,7 +111,7 @@ export async function deleteEquipmentDetail(detailId: string | number) {
 
 export async function getEquipmentDetailStats() {
   try {
-    const res = await fetch(`${API_BASE}/equipment-details-stats/`, {
+    const res = await fetch(`${API_BASE}/stats/category-items/`, {
       credentials: "include",
       headers: {
         Accept: "application/json",
@@ -136,7 +136,7 @@ export async function getEquipmentDetailStats() {
 
 export async function getEquipmentDetailStatsForAdmin() {
   try {
-    const res = await fetch(`${API_BASE}/equipment-details-stats-admin/`, {
+    const res = await fetch(`${API_BASE}/admin/stats/category-items/`, {
       credentials: "include",
       headers: {
         Accept: "application/json",

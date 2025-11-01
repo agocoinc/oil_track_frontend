@@ -15,7 +15,7 @@ export default function LoginPage() {
       try {
         const user = await checkAuth();
         if (user) {
-          await isAdmin() ? router.push("/admin") : router.push("/dashboard");
+          await isAdmin() ? router.push("/dashboard") : router.push("/dashboard");
         }
       } catch(err) {
         setLoading(false)

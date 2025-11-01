@@ -8,7 +8,13 @@
       "tradingName":  "إدارة الشؤون الإدارية",
       "organizationChildRelationship": [
         {
-          "tradingName":  "إدارة الشؤون المالية"
+          "tradingName":  "إدارة الشؤون المالية",
+          "organizationChildRelationship": [
+              {
+            "tradingName":  "إدارة الشؤون المالية",
+            "organizationChildRelationship": []
+          }
+          ]
         },
         {
           "tradingName":  "إدارة الشؤون القانونية"

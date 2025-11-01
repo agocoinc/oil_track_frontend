@@ -2,10 +2,14 @@
 
 import * as React from "react"
 import {
+  IconBusinessplan,
+  IconCategory,
   IconDashboard,
   IconDatabase,
   IconInnerShadowTop,
-  IconTable
+  IconMap,
+  IconTable,
+  IconUsersGroup
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -30,10 +34,10 @@ const data = {
       role: "user"
     },
     {
-      title: "المعدات",
-      url: "/equipments",
-      icon: IconDatabase,
-      role: "user"
+      title: "الصفحة الرئيسية",
+      url:  "/dashboard",
+      icon: IconDashboard,
+      role: "admin"
     },
     {
       title: "الشركات",
@@ -41,7 +45,30 @@ const data = {
       icon: IconTable,
       role: "admin"
     },
-   
+    {
+      title: "التصنيفات",
+      url: "/categories",
+      icon: IconCategory,
+      role: "admin"
+    },
+    {
+      title: "التصنيفات",
+      url: "/u/categories",
+      icon: IconCategory,
+      role: "user"
+    },
+    {
+      title: "المستخدمين",
+      url: "/users",
+      icon: IconUsersGroup,
+      role: "admin"
+    },
+    {
+      title: "مخطط الشركة",
+      url: "/u/management-structure",
+      icon: IconMap,
+      role: "user"
+    }
    
   ],
   
@@ -65,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">شركة الخليج</span>
+                <span className="text-base font-semibold">نظام التتبع</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -16,6 +16,9 @@ interface AccountType {
 
 export interface OrganizationType {
   tradingName: string;
+  managerName?: string;
+  managerPhoto?: string;
+  category?: string;
   account: AccountType[];
   organizationChildRelationship: OrganizationType[];
   collapsed?: boolean;
@@ -39,16 +42,32 @@ function Organization({ org, onCollapse, collapsed }: OrganizationProps) {
     >
       <div className="flex items-center justify-between">
         <div className="relative">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-blue-600">
-            🏢
+          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+            {org?.managerPhoto ? (
+              <img
+                src={`http://localhost:8080/storage/${org.managerPhoto}`}
+                alt={org.managerName}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"; // hide broken image
+                  // e.currentTarget.parentElement.innerHTML = "🏢"; // show icon fallback
+                }}
+              />
+            ) : (
+              <span className="text-blue-600 text-lg">🏢</span>
+            )}
           </div>
+
           {collapsed && childrenCount > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
               {childrenCount}
             </span>
           )}
         </div>
-        <div className="mr-2 text-sm font-semibold">{org.tradingName}</div>
+        <div>
+          <p className="mr-2 text-sm font-semibold">{org.tradingName}</p>
+          <p className="mr-2 text-sm font-semibold">{org?.managerName ? org.managerName : ''}</p>
+        </div>
       </div>
     </div>
   );

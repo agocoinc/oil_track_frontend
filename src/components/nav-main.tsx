@@ -48,20 +48,20 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items
-            .filter(item => user.role === 'admin' || item.role !== 'admin')
-            .map(item => (
-              <SidebarMenuItem
-                key={item.title}
-                className={user.role === 'admin' && item.role === 'admin' ? '' : undefined}
-              >
-                <SidebarMenuButton tooltip={item.role === 'admin' ? `${item.title} (Admin)` : item.title}>
-                  {item.icon && <item.icon />}
-                  <Link href={item.url}>{item.title}</Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-        </SidebarMenu>
+  {items
+    .filter(item => item.role === user.role) // only show items matching the user role
+    .map(item => (
+      <SidebarMenuItem key={item.title}>
+        <SidebarMenuButton
+          tooltip={item.role === 'admin' ? `${item.title} (Admin)` : item.title}
+        >
+          {item.icon && <item.icon />}
+          <Link href={item.url}>{item.title}</Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    ))}
+</SidebarMenu>
+
 
       </SidebarGroupContent>
     </SidebarGroup>

@@ -159,6 +159,29 @@ export default function DashboardPage() {
           {/* بطاقات الإحصائيات */}
           <div className={`grid gap-6 md:grid-cols-${checkAdmin ? '3' : '2'}`}>
 
+                
+
+                <Card
+                  className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
+                >
+                  <CardContent className="flex items-center gap-6 p-6">
+                    <div className="rounded-lg bg-primary/10 p-4">
+                      <DatabaseIcon className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        العناصر
+                      </p>
+                      <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
+                      {quickStats?.details}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                
+
+                {checkAdmin && <>
                 <Card
                   className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
                 >
@@ -176,26 +199,8 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
                 </Card>
-
+                
                 <Card
-                  className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
-                >
-                  <CardContent className="flex items-center gap-6 p-6">
-                    <div className="rounded-lg bg-primary/10 p-4">
-                      <DatabaseIcon className="h-8 w-8 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        المعدات 
-                      </p>
-                      <p className="text-4xl font-bold text-gray-900 dark:text-gray-50">
-                      {quickStats?.details}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {checkAdmin && <Card
                   className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
                 >
                   <CardContent className="flex items-center gap-6 p-6">
@@ -211,7 +216,8 @@ export default function DashboardPage() {
                       </p>
                     </div>
                   </CardContent>
-                </Card>}
+                </Card>
+                </>}
 
 
           </div>
