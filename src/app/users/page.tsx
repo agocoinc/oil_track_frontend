@@ -149,8 +149,8 @@ const [selectedCompany, setSelectedCompany] = useState<number | null>(null);
           const res = await getCompanies()
         
         if (res?.status) {
-          console.log("all companies ", res.data.data)
-          setCompanies(res.data.data)
+          console.log("all companies ", res.data.data.data)
+          setCompanies(res.data.data.data)
         } else {
           
           setError("حدث خطأ أثناء جلب الشركات")
